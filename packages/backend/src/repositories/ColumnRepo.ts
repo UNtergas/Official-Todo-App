@@ -1,7 +1,7 @@
 import {IRepository} from "./IRepository";
 import {Column} from "@app/shared-models/src/Column";
 import {PRISMA_CLIENT, Prisma} from "../../prisma";
-import {ColumnCreationRequest} from "@app/shared-utils/src/api-request-type";
+import {ColumnCreationRequestDTO} from "../../../shared-utils/src/api-dto-type";
 
 export class ColumnRepo implements IRepository<Column> {
     private static instance: ColumnRepo | null = null;
@@ -20,7 +20,7 @@ export class ColumnRepo implements IRepository<Column> {
         return PRISMA_CLIENT.column.count();
     }
 
-    async createOne(columnCreationRequest: ColumnCreationRequest): Promise<Column> {
+    async createOne(columnCreationRequest: ColumnCreationRequestDTO): Promise<Column> {
         return PRISMA_CLIENT.column.create({
             data: columnCreationRequest,
             include: {

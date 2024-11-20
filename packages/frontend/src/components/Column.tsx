@@ -29,8 +29,8 @@ const Column = ({ text, index, id, isDragged }: ColumnProp) => {
                     {
                         (provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
-                                {state.lists[index].tasks.map((task, index) => (
-                                    <Card text={task.text} id={task.id} index={index} key={task.id} columnId={id} />
+                                {state.columns[index].cards.map((task, index) => (
+                                    <Card text={task.description} id={task.id} index={index} key={task.id} columnId={id} />
                                 ))}
                                 {provided.placeholder}
                             </div>
