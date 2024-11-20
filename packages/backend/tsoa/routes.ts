@@ -32,6 +32,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ColumnGetAllDTO": {
+        "dataType": "refAlias",
+        "type": {"dataType":"array","array":{"dataType":"refObject","ref":"Column"},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ColumnGetOneDTO": {
+        "dataType": "refAlias",
+        "type": {"ref":"Column","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Column.Exclude_keyofColumn.id-or-cards__": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"columnName":{"dataType":"string","required":true}},"validators":{}},
@@ -42,7 +52,7 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"Pick_Column.Exclude_keyofColumn.id-or-cards__","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ColumnCreationRequest": {
+    "ColumnCreationRequestDTO": {
         "dataType": "refAlias",
         "type": {"ref":"Omit_Column.id-or-cards_","validators":{}},
     },
@@ -99,7 +109,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ColumnController_createColumn(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"ColumnCreationRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"ColumnCreationRequestDTO"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

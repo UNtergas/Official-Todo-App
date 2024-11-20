@@ -53,6 +53,15 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ColumnGetAllDTO": {
+				"items": {
+					"$ref": "#/components/schemas/Column"
+				},
+				"type": "array"
+			},
+			"ColumnGetOneDTO": {
+				"$ref": "#/components/schemas/Column"
+			},
 			"Pick_Column.Exclude_keyofColumn.id-or-cards__": {
 				"properties": {
 					"columnName": {
@@ -69,7 +78,7 @@
 				"$ref": "#/components/schemas/Pick_Column.Exclude_keyofColumn.id-or-cards__",
 				"description": "Construct a type with the properties of T except for those in type K."
 			},
-			"ColumnCreationRequest": {
+			"ColumnCreationRequestDTO": {
 				"$ref": "#/components/schemas/Omit_Column.id-or-cards_"
 			}
 		},
@@ -90,16 +99,13 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/Column"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/ColumnGetAllDTO"
 								}
 							}
 						}
 					}
 				},
-				"description": "Retrieves a list of all users",
+				"description": "Retrieves a list of columns",
 				"security": [],
 				"parameters": []
 			},
@@ -111,7 +117,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Column"
+									"$ref": "#/components/schemas/ColumnGetOneDTO"
 								}
 							}
 						}
@@ -125,7 +131,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/ColumnCreationRequest"
+								"$ref": "#/components/schemas/ColumnCreationRequestDTO"
 							}
 						}
 					}
@@ -143,7 +149,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/Column"
+											"$ref": "#/components/schemas/ColumnGetOneDTO"
 										}
 									],
 									"nullable": true
@@ -152,7 +158,7 @@
 						}
 					}
 				},
-				"description": "Retrieves user by userId",
+				"description": "Retrieves column by columnID",
 				"security": [],
 				"parameters": [
 					{
