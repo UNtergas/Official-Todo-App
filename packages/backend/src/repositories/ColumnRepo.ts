@@ -29,11 +29,22 @@ export class ColumnRepo implements IRepository<Column> {
         });
     }
 
-    deleteMany(): void {
-        PRISMA_CLIENT.column.deleteMany({});
+    async deleteOne(id: number): Promise<Column | null> {
+        return PRISMA_CLIENT.column.delete({
+            where: {
+                id: id
+            },
+            include: {
+                cards: true,
+            }
+        })
     }
 
-    findAll(): Promise<Array<Column>> {
+    async deleteMany(): Promise<void> {
+        return PRISMA_CLIENT.column.deleteMany({}).then(() => {});
+    }
+
+    async findAll(): Promise<Array<Column>> {
         return PRISMA_CLIENT.column.findMany({
             include: {
                 cards: true,
@@ -41,7 +52,7 @@ export class ColumnRepo implements IRepository<Column> {
         });
     }
 
-    findOneById(id: number): Promise<Column | null> {
+    async findOneById(id: number): Promise<Column | null> {
         return PRISMA_CLIENT.column.findUnique({
             where: {
                 id: id
@@ -51,5 +62,4 @@ export class ColumnRepo implements IRepository<Column> {
             }
         });
     }
-
 }

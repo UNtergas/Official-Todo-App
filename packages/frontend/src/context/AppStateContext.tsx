@@ -2,7 +2,6 @@ import React, { createContext, useReducer } from "react"
 import { v4 as uuid } from "uuid";
 
 import { findItemIndexById, moveItem } from "@frontend/utils"
-import { type DragItem } from "@frontend/types/DragItem.ts";
 
 interface Task {
     id: string
@@ -17,7 +16,6 @@ interface List {
 
 interface AppState {
     lists: List[],
-    draggedItem?: DragItem
 }
 
 
@@ -62,10 +60,6 @@ type Action =
             dragIndex: number
             hoverIndex: number
         }
-    }
-    | {
-        type: "SET_DRAGGED_ITEM"
-        payload: DragItem | undefined
     }
     | {
         type: "MOVE_TASK"
@@ -132,9 +126,6 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
                 lists: moveItem(state.lists, dragIndex, hoverIndex)
             }
 
-        }
-        case "SET_DRAGGED_ITEM": {
-            return { ...state, draggedItem: action.payload }
         }
 
         case "MOVE_TASK": {

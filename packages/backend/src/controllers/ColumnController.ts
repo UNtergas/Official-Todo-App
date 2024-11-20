@@ -9,7 +9,7 @@ export class ColumnController extends Controller {
     private columnRepo: IRepository<Column> = ColumnRepo.getInstance();
 
     /**
-     * Retrieves a list of all users
+     * Retrieves a list of all columns
      */
     @Get("")
     public async getColumns(): Promise<Column[]> {
@@ -29,7 +29,7 @@ export class ColumnController extends Controller {
     }
 
     /**
-     * Retrieves user by userId
+     * Retrieves column by columnID
      */
     @Get("{columnId}")
     public async getColumnById(
