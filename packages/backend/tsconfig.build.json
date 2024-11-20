@@ -5,7 +5,8 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "@app/shared/src/*": ["../shared/src/*"]
+      "@app/shared-models/src/*": ["../shared-models/src/*"],
+      "@app/shared-utils/src/*": ["../shared-utils/src/*"]
     }
   },
 }
