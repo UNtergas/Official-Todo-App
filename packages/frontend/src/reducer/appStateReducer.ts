@@ -1,12 +1,13 @@
 import {Action, AppState} from "@frontend/utils/utils-type.ts";
-import {v4 as uuid} from "uuid";
 import {findItemIndexById, moveItem} from "@frontend/utils";
+import {Card} from "@app/shared-models/src/Card";
 
 
 export const appStateReducer = (state: AppState, action: Action): AppState => {
     switch (action.type) {
         case "ADD_COLUMN": {
             const column = action.payload
+            console.log('column', column);
             if (!column) {
                 return state
             }
@@ -19,22 +20,25 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
             }
         }
         case "ADD_CARD": {
-            const { text, taskId } = action.payload;
-            console.log(text, taskId);
-            if (!text) {
+            const card = action.payload;
+
+            if (!card) {
                 return state
             }
-            const targetLaneIndex = findItemIndexById(state.columns, taskId)
-            const targetLane = state.columns[targetLaneIndex];
 
-            const updatedTasks = [...targetLane.cards, { id: uuid(), description: text }];
+            const targetColumnId = card.columnId;
 
-            const updatedLane = { ...targetLane, cards: updatedTasks };
+            const targetColumnPosition = findItemIndexById(state.columns, targetColumnId);
+            const targetColumn = state.columns[targetColumnPosition];
 
-            const updatedLists = state.columns.map(list => list.id === taskId ? updatedLane : list);
+            const updatedCardsOfTargetColumn = [...targetColumn.cards, card];
+
+            const updatedColumn = { ...targetColumn, cards: updatedCardsOfTargetColumn };
+
+            const updatedColumns = state.columns.map(column => column.id === targetColumnId ? updatedColumn : column);
             return {
                 ...state,
-                columns: updatedLists
+                columns: updatedColumns
             }
         }
         case "MOVE_COLUMN": {
@@ -43,7 +47,6 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
                 ...state,
                 columns: moveItem(state.columns, dragIndex, hoverIndex)
             }
-
         }
 
         case "MOVE_CARD": {
@@ -87,17 +90,16 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
         }
         case "DELETE_CARD": {
             const { cardId, columnId } = action.payload;
-            const targetLaneIndex = findItemIndexById(state.columns, columnId);
-            const targetLane = state.columns[targetLaneIndex];
+            const targetColumn = state.columns[findItemIndexById(state.columns, columnId)];
 
-            const updatedTasks = targetLane.cards.filter(task => task.id !== cardId);
+            const updatedCardsInTargetColumn = targetColumn.cards.filter(task => task.id !== cardId);
 
-            const updatedLane = { ...targetLane, cards: updatedTasks };
+            const updatedTargetColumn = { ...targetColumn, cards: updatedCardsInTargetColumn };
 
-            const updatedLists = state.columns.map(list => list.id === columnId ? updatedLane : list);
+            const updatedColumns = state.columns.map(column => column.id === columnId ? updatedTargetColumn : column);
             return {
                 ...state,
-                columns: updatedLists
+                columns: updatedColumns
             }
         }
         case "DELETE_COLUMN": {

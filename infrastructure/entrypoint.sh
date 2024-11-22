@@ -14,7 +14,7 @@ export NGINX_REVERSE_PROXY_DEV_CONTAINER="nginx-reverse-proxy-dev"
 export DATABASE_CONTAINER="postgres-db"
 
 export BACKEND_PROD_CONTAINER="backend-prod" 
-export NGINX_REVERSE_PROXY_PROD_CONTAINER="nginx-reverse-proxy-prod" # The frontend is served as static files direcly on nginx container
+export NGINX_REVERSE_PROXY_PROD_CONTAINER="nginx-reverse-proxy-prod" # The frontend is served as public files direcly on nginx container
 
 ##################
 # Folder location
@@ -182,13 +182,19 @@ create_tls_certificates() {
 
 # Function to clean node_modules and dist
 clean_app() {
-  docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1 --volumes
-  docker compose -f "${DOCKER_COMPOSE_PROD}" down -t 1 --volumes
-  sudo rm -rf node_modules packages/*/node_modules packages/*/dist
-  sudo rm -f "${NGINX_DEV}"
-  sudo rm -f "${NGINX_PROD}"
-  sudo docker volume remove postgres_data
-  echo "node_modules, dist, nginx config files, postgres_data volume removed successfully !"
+  read -r -p "Data on dev database will be lost. Proceed? (y/n): " proceed
+
+  if [[ "$proceed" =~ ^[yY]$ ]]; then
+    docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1 --volumes
+    docker compose -f "${DOCKER_COMPOSE_PROD}" down -t 1 --volumes
+    sudo rm -rf node_modules packages/*/node_modules packages/*/dist
+    sudo rm -rf packages/backend/tsoa
+    sudo rm pnpm-lock.yaml .pnpm-store
+    sudo rm -f "${NGINX_DEV}"
+    sudo rm -f "${NGINX_PROD}"
+    sudo docker volume remove postgres_data
+    echo "node_modules, dist, nginx config files, postgres_data volume removed successfully !"
+  fi
 }
 
 # Internal Function to synchronize the env file in ROOT_PROJECT and packages/backend by using symbolic link
@@ -201,11 +207,11 @@ run_prod() {
   sync_env_files
   export DOCKER_PROD_ENTRY_CMD="pnpm i && pnpm run build:backend && pnpm run prod"
   envsubst "${BACKEND_PROD_CONTAINER}" < "${NGINX_PROD_TEMPLATE}" > "${NGINX_PROD}"
-  pnpm run build:frontend # build the frontend and mount to docker that runs nginx so that nginx can serve static fe file.
+  pnpm run build:frontend # build the frontend and mount to docker that runs nginx so that nginx can serve public fe file.
   docker compose -f "${DOCKER_COMPOSE_PROD}" build --no-cache
   docker compose -f "${DOCKER_COMPOSE_PROD}" up --remove-orphans -d
   docker compose -f "${DOCKER_COMPOSE_PROD}" logs -f app-backend-prod -f nginx-reverse-proxy-prod
-  docker compose -f "${DOCKER_COMPOSE_PROD}" down -t 1 --volumes
+  docker compose -f "${DOCKER_COMPOSE_PROD}" down -t 1
 }
 
 # Function to start Docker Compose in development mode
@@ -217,7 +223,7 @@ run_dev() {
   docker compose -f "${DOCKER_COMPOSE_DEV}" build --no-cache
   docker compose -f "${DOCKER_COMPOSE_DEV}" up --remove-orphans -d
   docker compose -f "${DOCKER_COMPOSE_DEV}" logs -f app-dev -f postgres-db -f nginx-reverse-proxy-dev # Service name not container name
-  docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1 --volumes
+  docker compose -f "${DOCKER_COMPOSE_DEV}" down -t 1
 }
 
 if [[ "$1" = "help" || "$1" = "--help" || "$1" = "-h" ]]; then

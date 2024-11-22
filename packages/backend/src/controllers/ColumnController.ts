@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Path, Post, Route} from "tsoa";
+import {Body, Controller, Delete, Get, Path, Post, Route} from "tsoa";
 import {IRepository} from "../repositories/IRepository";
 import {Column} from "@app/shared-models/src/Column";
 import {ColumnRepo} from "../repositories/ColumnRepo";
@@ -31,8 +31,15 @@ export class ColumnController extends Controller {
      */
     @Get("{columnId}")
     public async getColumnById(
-        @Path() columnId: number
+        @Path() columnId: string
     ): Promise<Column | null> {
         return await this.columnRepo.findOneById(columnId);
+    }
+
+    @Delete("{columnId}")
+    public async deleteColumnById(
+        @Path() columnId: string
+    ) {
+        return await this.columnRepo.deleteOne(columnId);
     }
 }

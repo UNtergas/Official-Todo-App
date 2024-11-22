@@ -17,8 +17,8 @@ const models: TsoaRoute.Models = {
     "Card": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double","required":true},
-            "columnId": {"dataType":"double","required":true},
+            "id": {"dataType":"string","required":true},
+            "columnId": {"dataType":"string","required":true},
             "description": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -27,7 +27,7 @@ const models: TsoaRoute.Models = {
     "Column": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"double","required":true},
+            "id": {"dataType":"string","required":true},
             "columnName": {"dataType":"string","required":true},
             "cards": {"dataType":"array","array":{"dataType":"refObject","ref":"Card"},"required":true},
         },
@@ -51,7 +51,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Card.Exclude_keyofCard.id__": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"columnId":{"dataType":"double","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"columnId":{"dataType":"string","required":true},"description":{"dataType":"string","required":true}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Omit_Card.id_": {
@@ -59,9 +59,14 @@ const models: TsoaRoute.Models = {
         "type": {"ref":"Pick_Card.Exclude_keyofCard.id__","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CardCreationRequest": {
+    "CardCreationRequestDTO": {
         "dataType": "refAlias",
         "type": {"ref":"Omit_Card.id_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_Card_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"dataType":"string"},"columnId":{"dataType":"string"},"description":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -146,7 +151,7 @@ export function RegisterRoutes(app: Router) {
 
             async function ColumnController_getColumnById(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    columnId: {"in":"path","name":"columnId","required":true,"dataType":"double"},
+                    columnId: {"in":"path","name":"columnId","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -159,6 +164,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getColumnById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/api/column/:columnId',
+            ...(fetchMiddlewares<RequestHandler>(ColumnController)),
+            ...(fetchMiddlewares<RequestHandler>(ColumnController.prototype.deleteColumnById)),
+
+            async function ColumnController_deleteColumnById(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    columnId: {"in":"path","name":"columnId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new ColumnController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteColumnById',
                 controller,
                 response,
                 next,
@@ -205,7 +240,7 @@ export function RegisterRoutes(app: Router) {
 
             async function CardController_createCard(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CardCreationRequest"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"CardCreationRequestDTO"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -235,7 +270,7 @@ export function RegisterRoutes(app: Router) {
 
             async function CardController_getCardById(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    cardId: {"in":"path","name":"cardId","required":true,"dataType":"double"},
+                    cardId: {"in":"path","name":"cardId","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -248,6 +283,67 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getCardById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/api/card/:cardId',
+            ...(fetchMiddlewares<RequestHandler>(CardController)),
+            ...(fetchMiddlewares<RequestHandler>(CardController.prototype.editCardById)),
+
+            async function CardController_editCardById(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cardId: {"in":"path","name":"cardId","required":true,"dataType":"string"},
+                    requestBody: {"in":"body","name":"requestBody","required":true,"ref":"Partial_Card_"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new CardController();
+
+              await templateService.apiHandler({
+                methodName: 'editCardById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/api/card/:cardId',
+            ...(fetchMiddlewares<RequestHandler>(CardController)),
+            ...(fetchMiddlewares<RequestHandler>(CardController.prototype.deleteCardById)),
+
+            async function CardController_deleteCardById(request: ExRequest, response: ExResponse, next: any) {
+            const args: Record<string, TsoaRoute.ParameterSchema> = {
+                    cardId: {"in":"path","name":"cardId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args, request, response });
+
+                const controller = new CardController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteCardById',
                 controller,
                 response,
                 next,

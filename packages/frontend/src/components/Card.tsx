@@ -2,6 +2,7 @@
 import { Draggable } from "react-beautiful-dnd";
 import { CardContainer, DeleteButton } from "../styles";
 import { useAppState } from "../hooks";
+import {apiClient} from "@frontend/utils/api-client.ts";
 
 interface CardProp {
     text: string
@@ -12,7 +13,13 @@ interface CardProp {
 
 
 const Card = ({ text, id, index, columnId }: CardProp) => {
-    const { dispatch } = useAppState()
+    const { dispatch } = useAppState();
+
+    const onDeleteCard = async () => {
+        await apiClient.card.deleteOne(id);
+        dispatch({ type: "DELETE_CARD", payload: { cardId: id, columnId } });
+    }
+
     return (
         <Draggable key={id} draggableId={id} index={index}>
             {
@@ -23,7 +30,7 @@ const Card = ({ text, id, index, columnId }: CardProp) => {
                         {...provided.dragHandleProps}
                     >
                         {text}
-                        <DeleteButton onClick={() => dispatch({ type: "DELETE_COLUMN", payload: { cardId: id, columnId } })} > X</DeleteButton>
+                        <DeleteButton onClick={() => onDeleteCard()} > X</DeleteButton>
                     </CardContainer>
                 )
             }

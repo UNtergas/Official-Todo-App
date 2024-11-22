@@ -13,14 +13,14 @@ datasource db {
 }
 
 model Column {
-  id         Int    @id @default(autoincrement())
+  id         String @id @default(uuid())
   columnName String
   cards      Card[]
 }
 
 model Card {
-  id          Int    @id @default(autoincrement())
+  id          String @id @default(uuid())
   description String
-  Column      Column @relation(fields: [columnId], references: [id])
-  columnId    Int // Relation scalar field (used in `@relation` attribute avove)
+  Column      Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  columnId    String
 }

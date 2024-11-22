@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from "react"
 import {AppState, AppStateContextProps} from "@frontend/utils/utils-type.ts";
 import {appStateReducer} from "@frontend/reducer/appStateReducer.ts";
-import {apiClient} from "@frontend/api-client.ts";
+import {apiClient} from "@frontend/utils/api-client.ts";
 
 export const AppStateContext = createContext<AppStateContextProps>({} as AppStateContextProps)
 

@@ -130,10 +130,10 @@ pnpm --filter <backend | frontend | shared-utils | shared-models> add <package>
 
 ## Architecture
 #### Development
-![Docker Compose for Development](static/architecture-dev.png)
+![Docker Compose for Development](public/architecture-dev.png)
 
 #### Production
-![Docker Compose for Production](static/architecture-prod.png)
+![Docker Compose for Production](public/architecture-prod.png)
 
 ## TODO
 - [ ] Section explaining diff from Dev, Prod, Test environment. How they are set up.

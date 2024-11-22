@@ -1,8 +1,8 @@
-import {Body, Controller, Get, Path, Post, Route} from "tsoa";
+import {Body, Controller, Delete, Get, Path, Post, Put, Route} from "tsoa";
 import {IRepository} from "../repositories/IRepository";
 import {Card} from "@app/shared-models/src/Card";
 import {CardRepo} from "../repositories/CardRepo";
-import {type CardCreationRequest} from "@app/shared-utils/src/api-request-type";
+import {type CardCreationRequestDTO} from "@app/shared-utils/src/api-dto-type";
 
 @Route("/api/card")
 export class CardController extends Controller{
@@ -13,8 +13,7 @@ export class CardController extends Controller{
      */
     @Get("")
     public async getCards(): Promise<Card[]> {
-        const cards: Card[] = await this.cardRepo.findAll();
-        return cards;
+        return await this.cardRepo.findAll();
     }
 
     /**
@@ -22,10 +21,9 @@ export class CardController extends Controller{
      */
     @Post()
     public async createCard(
-        @Body() requestBody: CardCreationRequest,
+        @Body() requestBody: CardCreationRequestDTO,
     ): Promise<Card> {
-        const card = await this.cardRepo.createOne(requestBody);
-        return card;
+        return await this.cardRepo.createOne(requestBody);
     }
 
     /**
@@ -33,10 +31,29 @@ export class CardController extends Controller{
      */
     @Get("{cardId}")
     public async getCardById(
-        @Path() cardId: number
+        @Path() cardId: string
     ): Promise<Card | null> {
-        const card: Card | null = await this.cardRepo.findOneById(cardId);
-        return card;
+        return await this.cardRepo.findOneById(cardId);
+    }
+
+    @Put("{cardId}")
+    public async editCardById(
+        @Path() cardId: string,
+        @Body() requestBody: Partial<Card>
+    ): Promise<Card> {
+        const card = await this.cardRepo.findOneById(cardId);
+        if (!card) {
+            throw new Error("Card not found");
+        }
+
+        return await this.cardRepo.updateOne(cardId, requestBody);
+    }
+
+    @Delete("{cardId}")
+    public async deleteCardById(
+        @Path() cardId: string
+    ) {
+        return await this.cardRepo.deleteOne(cardId);
     }
 
 }

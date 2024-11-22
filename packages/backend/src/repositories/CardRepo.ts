@@ -1,7 +1,7 @@
 import {IRepository} from "./IRepository";
 import {Card} from "@app/shared-models/src/Card";
 import {PRISMA_CLIENT, Prisma} from "../../prisma";
-import {CardCreationRequest} from "@app/shared-utils/src/api-request-type";
+import {CardCreationRequestDTO} from "@app/shared-utils/src/api-dto-type";
 
 export class CardRepo implements IRepository<Card> {
     private static instance: CardRepo | null = null;
@@ -20,13 +20,13 @@ export class CardRepo implements IRepository<Card> {
         return PRISMA_CLIENT.card.count();
     }
 
-    async createOne(cardCreationRequest: CardCreationRequest): Promise<Card> {
+    async createOne(cardCreationRequest: CardCreationRequestDTO): Promise<Card> {
         return PRISMA_CLIENT.card.create({
             data: cardCreationRequest,
         });
     }
 
-    async deleteOne(id: number): Promise<Card | null> {
+    async deleteOne(id: string): Promise<Card | null> {
         return PRISMA_CLIENT.card.delete({
             where: {
                 id: id
@@ -42,11 +42,20 @@ export class CardRepo implements IRepository<Card> {
         return PRISMA_CLIENT.card.findMany();
     }
 
-    async findOneById(id: number): Promise<Card | null> {
+    async findOneById(id: string): Promise<Card | null> {
         return PRISMA_CLIENT.card.findUnique({
             where: {
                 id: id
             }
+        });
+    }
+
+    updateOne(cardId: string, cardUpdateData: Partial<Card>): Promise<Card> {
+        return PRISMA_CLIENT.card.update({
+            where: {
+                id: cardId,
+            },
+            data: cardUpdateData,
         });
     }
 }
