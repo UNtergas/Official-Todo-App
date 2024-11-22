@@ -6,13 +6,13 @@ import { AddNewItem, DragColumn } from '@frontend/components';
 
 import { useAppState } from '@frontend/hooks';
 import { StrictModeDroppable } from '@frontend/utils/StrictModeDroppable';
+import {apiClient} from "@frontend/api-client.ts";
 
 
 export const App = () => {
     const { state, dispatch } = useAppState()
 
     const onDragEnd = (result: any) => {
-        console.log(result)
         const { destination, source, type } = result;
         if (!destination) {
             return;
@@ -22,14 +22,19 @@ export const App = () => {
         }
         switch (type) {
             case "column":
-                dispatch({ type: "MOVE_LIST", payload: { dragIndex: source.index, hoverIndex: destination.index } });
+                dispatch({ type: "MOVE_COLUMN", payload: { dragIndex: source.index, hoverIndex: destination.index } });
                 break
             case "card":
-                dispatch({ type: "MOVE_TASK", payload: { dragIndex: source.index, hoverIndex: destination.index, sourceColumn: source.droppableId, targetColumn: destination.droppableId } })
+                dispatch({ type: "MOVE_CARD", payload: { dragIndex: source.index, hoverIndex: destination.index, sourceColumn: source.droppableId, targetColumn: destination.droppableId } })
                 break
         }
-
     };
+
+    const onAddColumn = async (columnName: string)=> {
+        const createdColumn = await apiClient.column.createOne({columnName: columnName});
+        dispatch({ type: "ADD_COLUMN", payload: createdColumn });
+    }
+
     return (
         <>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -38,10 +43,10 @@ export const App = () => {
                         provided => (
                             <AppContainer {...provided.droppableProps} ref={provided.innerRef}>
                                 {state.columns.map((list, i) => (
-                                    <DragColumn id={list.id} text={list.columnName} key={list.id} index={i} />
+                                    <DragColumn id={list.id.toString()} text={list.columnName} key={list.id} index={i} />
                                 ))}
                                 <AddNewItem toggleButtonText='+ Add new list'
-                                            onAdd={text => dispatch({ type: "ADD_LIST", payload: text })} />
+                                            onAdd={text => onAddColumn(text)} />
                                 {provided.placeholder}
                             </AppContainer>
                         )

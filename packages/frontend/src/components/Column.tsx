@@ -4,6 +4,7 @@ import AddNewItem from "./AddNewItem";
 import { useAppState } from "@frontend/hooks";
 import Card from "./Card";
 import { StrictModeDroppable } from "@frontend/utils/StrictModeDroppable";
+import {apiClient} from "@frontend/api-client.ts";
 
 
 interface ColumnProp {
@@ -16,6 +17,10 @@ interface ColumnProp {
 
 const Column = ({ text, index, id, isDragged }: ColumnProp) => {
     const { state, dispatch } = useAppState()
+
+    const onAddCard = async (text: string) => {
+        dispatch({ type: "ADD_CARD", payload: { text, cardId: id } })
+    }
 
     return (
         <>
@@ -30,20 +35,17 @@ const Column = ({ text, index, id, isDragged }: ColumnProp) => {
                         (provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
                                 {state.columns[index].cards.map((task, index) => (
-                                    <Card text={task.description} id={task.id} index={index} key={task.id} columnId={id} />
+                                    <Card text={task.description} id={task.id.toString()} index={index} key={task.id} columnId={id} />
                                 ))}
                                 {provided.placeholder}
                             </div>
                         )
                     }
-                    {/* {state.lists[index].tasks.map((task, index) => (
-                        <Card text={task.text} id={task.id} index={index} />
-                    ))} */}
                 </StrictModeDroppable>
                 <AddNewItem
                     toggleButtonText="+ Add new task"
                     //! taskId here is Column's id
-                    onAdd={text => dispatch({ type: "ADD_TASK", payload: { text, taskId: id } })}
+                    onAdd={() => onAddCard(text)}
                     dark
                 />
             </ColumnContainer>

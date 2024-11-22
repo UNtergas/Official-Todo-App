@@ -2,7 +2,7 @@ import {Body, Controller, Get, Path, Post, Route} from "tsoa";
 import {IRepository} from "../repositories/IRepository";
 import {Column} from "@app/shared-models/src/Column";
 import {ColumnRepo} from "../repositories/ColumnRepo";
-import {type ColumnCreationRequestDTO, ColumnGetAllDTO, ColumnGetOneDTO} from "../../../shared-utils/src/api-dto-type";
+import {type ColumnCreationRequestDTO} from "@app/shared-utils/src/api-dto-type";
 
 @Route("/api/column")
 export class ColumnController extends Controller {
@@ -12,9 +12,8 @@ export class ColumnController extends Controller {
      * Retrieves a list of columns
      */
     @Get("")
-    public async getColumns(): Promise<ColumnGetAllDTO> {
-        const columns: Column[] = await this.columnRepo.findAll();
-        return columns;
+    public async getColumns(): Promise<Array<Column>> {
+        return await this.columnRepo.findAll();
     }
 
     /**
@@ -23,9 +22,8 @@ export class ColumnController extends Controller {
     @Post()
     public async createColumn(
         @Body() requestBody: ColumnCreationRequestDTO,
-    ) : Promise<ColumnGetOneDTO> {
-        const column = await this.columnRepo.createOne(requestBody);
-        return column;
+    ) : Promise<Column> {
+        return await this.columnRepo.createOne(requestBody);
     }
 
     /**
@@ -34,8 +32,7 @@ export class ColumnController extends Controller {
     @Get("{columnId}")
     public async getColumnById(
         @Path() columnId: number
-    ): Promise<ColumnGetOneDTO | null> {
-        const column: Column | null = await this.columnRepo.findOneById(columnId);
-        return column;
+    ): Promise<Column | null> {
+        return await this.columnRepo.findOneById(columnId);
     }
 }

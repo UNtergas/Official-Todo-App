@@ -5,7 +5,5 @@ import {Column} from "@app/shared-models/src/Column";
 export type ColumnCreationRequestDTO = Omit<Column, 'id' | 'cards'>;
 
 
-/////////////////////
-// API response type
-export type ColumnGetAllDTO = Array<Column>;
-export type ColumnGetOneDTO = Column;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// API response type (Typically, API response type is Model, but sometimes it can be transformed)

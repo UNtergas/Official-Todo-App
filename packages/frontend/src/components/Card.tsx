@@ -12,7 +12,7 @@ interface CardProp {
 
 
 const Card = ({ text, id, index, columnId }: CardProp) => {
-    const { state, dispatch } = useAppState()
+    const { dispatch } = useAppState()
     return (
         <Draggable key={id} draggableId={id} index={index}>
             {
@@ -23,7 +23,7 @@ const Card = ({ text, id, index, columnId }: CardProp) => {
                         {...provided.dragHandleProps}
                     >
                         {text}
-                        <DeleteButton onClick={() => dispatch({ type: "DELETE_TASK", payload: { taskId: id, columnId } })} > X</DeleteButton>
+                        <DeleteButton onClick={() => dispatch({ type: "DELETE_COLUMN", payload: { cardId: id, columnId } })} > X</DeleteButton>
                     </CardContainer>
                 )
             }

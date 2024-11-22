@@ -1,24 +1,24 @@
-import {Action, AppState, Card} from "@frontend/types/models.ts";
+import {Action, AppState} from "@frontend/utils/utils-type.ts";
 import {v4 as uuid} from "uuid";
 import {findItemIndexById, moveItem} from "@frontend/utils";
 
+
 export const appStateReducer = (state: AppState, action: Action): AppState => {
     switch (action.type) {
-        case "ADD_LIST": {
-            // Reducer logic here...
-            const text = action.payload
-            if (!text) {
+        case "ADD_COLUMN": {
+            const column = action.payload
+            if (!column) {
                 return state
             }
             return {
                 ...state,
                 columns: [
                     ...state.columns,
-                    { id: uuid(), columnName: text, cards: [] }
+                    column
                 ]
             }
         }
-        case "ADD_TASK": {
+        case "ADD_CARD": {
             const { text, taskId } = action.payload;
             console.log(text, taskId);
             if (!text) {
@@ -37,7 +37,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
                 columns: updatedLists
             }
         }
-        case "MOVE_LIST": {
+        case "MOVE_COLUMN": {
             const { dragIndex, hoverIndex } = action.payload
             return {
                 ...state,
@@ -46,7 +46,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
 
         }
 
-        case "MOVE_TASK": {
+        case "MOVE_CARD": {
             const { dragIndex, hoverIndex, sourceColumn, targetColumn } = action.payload;
 
             const sourceLaneIndex = findItemIndexById(state.columns, sourceColumn);
@@ -85,12 +85,12 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
                 columns: updatedLists
             };
         }
-        case "DELETE_TASK": {
-            const { taskId, columnId } = action.payload;
+        case "DELETE_CARD": {
+            const { cardId, columnId } = action.payload;
             const targetLaneIndex = findItemIndexById(state.columns, columnId);
             const targetLane = state.columns[targetLaneIndex];
 
-            const updatedTasks = targetLane.cards.filter(task => task.id !== taskId);
+            const updatedTasks = targetLane.cards.filter(task => task.id !== cardId);
 
             const updatedLane = { ...targetLane, cards: updatedTasks };
 

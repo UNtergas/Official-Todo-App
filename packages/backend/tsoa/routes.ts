@@ -32,16 +32,6 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ColumnGetAllDTO": {
-        "dataType": "refAlias",
-        "type": {"dataType":"array","array":{"dataType":"refObject","ref":"Column"},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ColumnGetOneDTO": {
-        "dataType": "refAlias",
-        "type": {"ref":"Column","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Column.Exclude_keyofColumn.id-or-cards__": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"columnName":{"dataType":"string","required":true}},"validators":{}},
