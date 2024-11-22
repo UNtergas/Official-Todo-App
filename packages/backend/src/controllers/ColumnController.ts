@@ -9,7 +9,7 @@ export class ColumnController extends Controller {
     private columnRepo: IRepository<Column> = ColumnRepo.getInstance();
 
     /**
-     * Retrieves a list of columns
+     * Retrieves a list of all columns
      */
     @Get("")
     public async getColumns(): Promise<Array<Column>> {
