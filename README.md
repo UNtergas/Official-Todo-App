@@ -10,8 +10,8 @@
 ![Tsoa 6.x.x](https://img.shields.io/badge/tsoa-6.4.0-green.svg)
 ![Swagger 5.x.x](https://img.shields.io/badge/swagger_api_docs-5.0.1-green.svg)
 
-This project is a production-ready fullstack Todo web application setup. We use `pnpm workspace` to
-set up mono repo.
+This project is a production-ready fullstack Todo web application using this fullstack web development 
+skeleton: https://github.com/AnPatapain/Official-Fullstack-Skeleton
 
 
 **Tech-stack overview**
@@ -39,24 +39,9 @@ multi-package.
   Contain entrypoint for running application and the files for infrastructure set up: Container (Docker),
   Reverse Proxy (Nginx), local TLS-SSL certificates.
 
-- **static/**  
-  Images for Docs.
-
-- **.dockerignore**  
-  Specifies files ignored by Docker; handles HTTPS via Nginx.
-
-- **.gitignore**  
-  Lists files not tracked by Git.
-
-- **README.md**  
-  Project overview, setup instructions, and docs.
-
 - **package.json**  
   Defines global project dependencies and scripts (using `pnpm`). Each package inside
   the folder `packages/` has also its own package.json
-
-- **pnpm-lock.yaml**  
-  Lock file ensuring consistent dependency versions.
 
 - **pnpm-workspace.yaml**  
   Workspace settings for managing monorepo with `pnpm`.
@@ -127,6 +112,16 @@ To install dependency for specific package
 ``` bash
 pnpm --filter <backend | frontend | shared-utils | shared-models> add <package>
 ```
+
+#### Working with prisma
+Typically, workflows is around changing the model schema, to do that you need:
+1. Stop application (if you already run it using ./entrypoint.sh dev or prod)
+2. Change your schema in packages/backend/prisma/schema.prisma
+3. Start application again (./entrypoint.sh dev). Prisma will automatically create
+a sql script reflecting your schema change. This script is called `migration` and will be 
+in packages/backend/prisma/migrations
+4. In case your `migration` is failed, you need to stop application, manually delete the migration in folder 
+packages/backend/prisma/migrations and start your application again.
 
 ## Architecture
 #### Development
