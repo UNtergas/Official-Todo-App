@@ -1,4 +1,5 @@
-# Official Todo App
+# !In working progress
+## Official Todo App
 ![Docker](https://img.shields.io/badge/docker-27.3.1-green)
 ![Nginx](https://img.shields.io/badge/nginx-alpine-green)
 ![Typescript](https://img.shields.io/badge/typescript-5.2.2-green.svg)
@@ -12,6 +13,8 @@
 
 This project is a production-ready fullstack Todo web application using this fullstack web development 
 skeleton: https://github.com/AnPatapain/Official-Fullstack-Skeleton
+Along with the integration of the frontend part from legacy code: https://github.com/UNtergas/Todo_list
+
 
 
 **Tech-stack overview**
@@ -22,119 +25,4 @@ skeleton: https://github.com/AnPatapain/Official-Fullstack-Skeleton
 - **Programming Language:** Typescript, Bash Script
 - **Backend:** Express (server framework), Tsoa-Swagger(controller & auto API docs), Postgresql (relational database), Prisma (ORM)
 - **Frontend:** React
-## Table of Contents
-- [Project structure](#project-structure)
-- [How to run](#how-to-run)
-- [Architecture](#architecture-)
-- [TODO](#todo)
-
-
-## Project structure
-This boilerplate use **pnpm**, a package manager to set up a workspace
-multi-package.
-- **packages/**  
-  Sub-packages for different project aspects (backend, frontend, etc.).
-
-- **infrastructure/**  
-  Contain entrypoint for running application and the files for infrastructure set up: Container (Docker),
-  Reverse Proxy (Nginx), local TLS-SSL certificates.
-
-- **package.json**  
-  Defines global project dependencies and scripts (using `pnpm`). Each package inside
-  the folder `packages/` has also its own package.json
-
-- **pnpm-workspace.yaml**  
-  Workspace settings for managing monorepo with `pnpm`.
-  In addition
-
-## How to run
-From root project, `./infrastructure/run.sh` is the entry point
-command to run different environments: development, production, test,
-reset environment, etc.
-#### Manual
-To see all options of the command `./infrastructure/run.sh` run:
-``` bash
-./infrastructure/run.sh --help
-```
-#### Check prerequisite installed
-To list all prerequisite. Run:
-``` bash
-./infrastructure/run.sh list-prerequisite
-```
-To check prerequisite on your environment. Run:
-``` bash
-./infrastructure/run.sh prerequisite
-```
-#### Development
-In development mode:
-- Frontend is served by Vite server with hot module reload
-- Typescript files will not be pre-transpiled to javascript but be transpiled
-  in run-time by ts-node
-- Mock data seed for development
-- Fake email smtp server
-
-To run development mode
-``` bash
-./infrastructure/run.sh dev
-```
-#### Production
-In production mode:
-- Frontend is built to single javascript file and served by Nginx
-- Backend is transpiled from Typescript to Javascript to be run
-- The mock data will not be seed
-
-To run application in production mode
-``` bash
-./infrastructure/run.sh prod
-```
-#### Clean
-To clean application environment.
-``` bash
-./infrastructure/run.sh clean
-```
-Best practice: Always run ```./infrastructure/run.sh clean``` before running
-```./infrastructure/run.sh dev``` and ```./infrastructure/run.sh prod```
-
-#### Install package
-Best practice: Run `./infrastructure/run.sh clean` before running any below commands
-
-
-To install every dependencies listed in packages/*/package.json
-``` bash
-pnpm install
-```  
-To install dev-dependency for specific package
-``` bash
-pnpm --filter <backend | frontend | shared-utils | shared-models> add --save-dev <package>
-```  
-
-To install dependency for specific package
-``` bash
-pnpm --filter <backend | frontend | shared-utils | shared-models> add <package>
-```
-
-#### Working with prisma
-Typically, workflows is around changing the model schema, to do that you need:
-1. Stop application (if you already run it using ./entrypoint.sh dev or prod)
-2. Change your schema in packages/backend/prisma/schema.prisma
-3. Start application again (./entrypoint.sh dev). Prisma will automatically create
-a sql script reflecting your schema change. This script is called `migration` and will be 
-in packages/backend/prisma/migrations
-4. In case your `migration` is failed, you need to stop application, manually delete the migration in folder 
-packages/backend/prisma/migrations and start your application again.
-
-## Architecture
-#### Development
-![Docker Compose for Development](public/architecture-dev.png)
-
-#### Production
-![Docker Compose for Production](public/architecture-prod.png)
-
-## TODO
-- [ ] Section explaining diff from Dev, Prod, Test environment. How they are set up.
-- [ ] Restrict import from some package
-- [ ] Script to check the prerequisite or install them maybe ?
-- [ ] Synchronize router, controller, API docs
-- [ ] User authentication, MFA
-- [ ] End-to-End test, Security test, Performance test.
-
+#
